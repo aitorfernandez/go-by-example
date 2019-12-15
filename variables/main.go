@@ -25,7 +25,7 @@ var (
 )
 
 func title(t string) {
-	fmt.Printf("\n-> %v\n", t)
+	fmt.Printf("\n- %v\n", t)
 }
 
 func main() {
