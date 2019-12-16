@@ -45,7 +45,7 @@ func main() {
 	title("Inside function and many at once")
 	// var declaration with implicit type
 	var j, k int = 1, 2
-	// short assignment
+	// Short assignment
 	javascript, python := true, false
 	fmt.Printf("%v, %v, %v, %v\n", j, k, javascript, python)
 

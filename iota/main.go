@@ -23,7 +23,8 @@ const (
 )
 
 const (
-	monday = iota // reset iota, monday = 0
+	// Reset iota, monday = 0
+	monday = iota
 	tuesday
 	// ...
 	// ...

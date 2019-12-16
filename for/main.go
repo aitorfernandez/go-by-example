@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	// old school for loop
+	// Old school for loop
 	// for init; condition; post {
 	// }
 
@@ -20,7 +20,7 @@ func main() {
 		}
 	}
 
-	// labels
+	// with Labels
 out:
 	for i := 0; i < 300; i++ {
 		// []byte deals with bytes, that is, only 1 byte (8 bits) at a time

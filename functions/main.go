@@ -12,12 +12,12 @@ func main() {
 	fmt.Println(greet("Hello", "Go!"))
 	fmt.Printf("greet func type %T\n", greet)
 
-	// self execution
+	// Self execution
 	func(i int) {
 		fmt.Printf("I'm self-execution! %v\n", i)
 	}(1)
 
-	// dynamic params
+	// Dynamic params
 	avg := average(43, 5, 87, 12, 3)
 	// data := []float64{43, 5, 87, 12, 3}
 	// avg := average(data...)
@@ -51,7 +51,7 @@ func returnID() (id int, err error) {
 	return
 }
 
-// multiple return, params
+// Multiple return, params
 func greet(fname, lname string) (string, string) {
 	return fmt.Sprint(fname, lname), fmt.Sprint(lname, fname)
 }
