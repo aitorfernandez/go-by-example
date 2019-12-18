@@ -27,6 +27,13 @@ func main() {
 	printWithCallback([]int{1, 2, 3, 4, 5}, func(i int) {
 		fmt.Printf("in callback %v\n", i)
 	})
+
+	// Panic and Recover
+	defer func() {
+		str := recover()
+		fmt.Println(str) // panic message
+	}()
+	panic("PANIC!")
 }
 
 // func average(values []float64) float64 { ... }
