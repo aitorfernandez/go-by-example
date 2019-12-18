@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// WaitGroup is used to wait for the program to finish goroutines
 var wg sync.WaitGroup
 
 func init() {

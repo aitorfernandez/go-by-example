@@ -33,6 +33,8 @@ func main() {
 		str := recover()
 		fmt.Println(str) // panic message
 	}()
+
+	// Stopping the Execution Flow and Control
 	panic("PANIC!")
 }
 

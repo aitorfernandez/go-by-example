@@ -23,4 +23,9 @@ func main() {
 	// (*p).X = 20 // works but no necessary
 	p.X = 20
 	fmt.Printf("%T, %v, %v", p, p.X, p.Y)
+
+	// // Struct instanceand assigning values
+	// var p position
+	// c.X = 10
+	// c.Y = 10
 }
