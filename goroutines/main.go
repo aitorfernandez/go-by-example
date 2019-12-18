@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"runtime"
 	"sync"
+	"time"
 )
 
 var wg sync.WaitGroup
@@ -14,6 +16,7 @@ func init() {
 
 func main() {
 	wg.Add(2)
+	// With a goroutine, return immediately to the next line and don’t wait for the function to complete
 	go foo()
 	go bar()
 	wg.Wait()
@@ -22,7 +25,8 @@ func main() {
 func foo() {
 	for i := 0; i < 12; i++ {
 		fmt.Println("Foo:", i)
-		// time.Sleep(3 * time.Millisecond)
+		amt := time.Duration(rand.Intn(250))
+		time.Sleep(amt * time.Millisecond)
 	}
 	wg.Done()
 }
@@ -30,7 +34,8 @@ func foo() {
 func bar() {
 	for i := 0; i < 12; i++ {
 		fmt.Println("Bar:", i)
-		// time.Sleep(20 * time.Millisecond)
+		amt := time.Duration(rand.Intn(250))
+		time.Sleep(amt * time.Millisecond)
 	}
 	wg.Done()
 }
