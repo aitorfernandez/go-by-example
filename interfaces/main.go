@@ -52,13 +52,19 @@ func main() {
 // 	animal
 // }
 
+// // Empty interfaces
+// type animals interface{}
+
 // func main() {
 // 	dog := dog{animal{"woof"}}
 // 	cat := cat{animal{"meow"}}
 
-// 	animals := []interface{}{dog, cat}
+// 	// without empty interface type
+// 	// animals := []interface{}{dog, cat}
+// 	// or
+// 	farm := []animals{dog, cat}
 
-// 	for _, a := range animals {
+// 	for _, a := range farm {
 // 		printValue(a)
 // 	}
 // }
