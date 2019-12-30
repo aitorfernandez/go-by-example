@@ -30,6 +30,7 @@ func Set(key string, value interface{}) error {
 	if _, err := p.Do("SET", key, value); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -41,6 +42,7 @@ func Hset(key string, field string, value interface{}) error {
 	if _, err := p.Do("HSET", key, field, value); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -50,6 +52,7 @@ func Get(key string) string {
 	defer p.Close()
 
 	v, _ := redis.String(p.Do("GET", key))
+
 	return v
 }
 
@@ -59,5 +62,6 @@ func Hget(key string, field string) string {
 	defer p.Close()
 
 	v, _ := redis.String(p.Do("HGET", key, field))
+
 	return v
 }

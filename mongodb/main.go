@@ -18,5 +18,6 @@ func Client(uri string, database string) *mongo.Database {
 	}
 
 	client := conn.Database(database)
+
 	return client
 }
