@@ -22,10 +22,27 @@ func main() {
 
 	// (*p).X = 20 // works but no necessary
 	p.X = 20
-	fmt.Printf("%T, %v, %v", p, p.X, p.Y)
+	fmt.Printf("%T, %v, %v\n", p, p.X, p.Y)
 
-	// // Struct instanceand assigning values
+	// Struct instanceand assigning values.
 	// var p position
 	// c.X = 10
 	// c.Y = 10
+
+	// Comparing structs.
+	x := position{1, 2}
+	y := position{3, 4}
+	z := position{3, 4}
+	fmt.Println(x == y)
+	fmt.Println(y == z)
+
+	// Comparing different structs with same props.
+	type point struct {
+		X, Y int
+		// Y, X int // can't compare with position X, Y
+	}
+
+	myPoint := point{1, 2}
+	// fmt.Println(x == myPoint) // mismatched types
+	fmt.Println(point(x) == myPoint)
 }
