@@ -41,7 +41,9 @@ func main() {
 	fmt.Println("The value:", v, "Exist?", ok)
 
 	// To test for a key without retrieving the value
-	if _, ok := m["top"]; ok == false {
+	// if _, ok := m["top"]; ok == false {
+	// or
+	if _, ok := m["top"]; !ok {
 		fmt.Println("Value doesn't exist")
 	}
 
@@ -54,4 +56,19 @@ func main() {
 
 	m["bottom"].Y = 2
 	fmt.Println(m["bottom"])
+
+	// maps cannot be compared to each other, the only legal comparison is with nil.
+	equal := func(x, y map[string]int) bool {
+		if len(x) != len(y) {
+			return false
+		}
+		for k, xv := range x {
+			if yv, ok := y[k]; !ok || yv != xv {
+				return false
+			}
+		}
+		return true
+	}
+	// true
+	fmt.Println("equal", equal(map[string]int{"a": 42}, map[string]int{"a": 42}))
 }
