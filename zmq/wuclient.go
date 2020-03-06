@@ -12,6 +12,8 @@ func main() {
 	defer subscriber.Close()
 
 	subscriber.Connect("tcp://localhost:5556")
+	// A subscriber can connect to more than one publisher
+	// subscriber.Connect("tcp://...")
 
 	// Note that when you use a SUB socket you must set a subscription using zmq_setsockopt() and SUBSCRIBE.
 	// ZMQ_SUBSCRIBE: Establish message filter.
