@@ -19,7 +19,7 @@ func main() {
 	defer sender.Close()
 	sender.Connect("tcp://localhost:5558")
 
-	// initialize the default Source to a deterministic state.
+	// Initialize the default Source to a deterministic state.
 	rand.Seed(time.Now().UnixNano())
 
 	for {
