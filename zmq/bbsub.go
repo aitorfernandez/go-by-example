@@ -12,7 +12,7 @@ func main() {
 	defer subscriber.Close()
 
 	subscriber.Bind("tcp://*:5556")
-	subscriber.SetSubscribe("hello")
+	subscriber.SetSubscribe("myTopic")
 
 	sender, _ := zmq.NewSocket(zmq.PUSH)
 	defer sender.Close()

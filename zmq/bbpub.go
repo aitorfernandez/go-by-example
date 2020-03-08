@@ -17,7 +17,7 @@ func main() {
 	for {
 		r := rand.Intn(100)
 
-		msg := fmt.Sprintf("Pub %d", r)
+		msg := fmt.Sprintf("myTopic %d", r)
 		publisher.Send(msg, 0)
 
 		time.Sleep(2 * time.Second)
