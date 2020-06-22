@@ -50,4 +50,15 @@ func main() {
 
 	// Contains
 	fmt.Println(strings.Contains(str, "Lorem"))
+
+	// Concatenating
+	con := func(data ...string) string {
+		var sb strings.Builder
+		for _, d := range data {
+			fmt.Fprintf(&sb, "%s...", d)
+		}
+
+		return sb.String()
+	}
+	fmt.Println(con("foo", "bar", "baz", "qzx"))
 }
