@@ -6,10 +6,10 @@ package gmachine
 const DefaultMemSize = 1024
 
 const (
-	// HALT stop the machine.
-	HALT = iota
-	// NOOP short for NO OPeration.
-	NOOP
+	// OpHALT stop the machine.
+	OpHALT = iota
+	// OpNOOP short for NO OPeration.
+	OpNOOP
 )
 
 // Gmachine keeps information about our computer system model.
@@ -30,5 +30,12 @@ func New() *Gmachine {
 
 // Run increments the P register.
 func (m *Gmachine) Run() {
-	m.P++
+	for {
+		op := m.Memory[m.P]
+		m.P++
+		switch op {
+		case OpHALT:
+			return
+		}
+	}
 }
