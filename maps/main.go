@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 type pos struct {
 	X, Y int
@@ -71,4 +74,62 @@ func main() {
 	}
 	// true
 	fmt.Println("equal", equal(map[string]int{"a": 42}, map[string]int{"a": 42}))
+
+	// map[string]interface{}
+	foods := map[string]interface{}{
+		"bacon": "delicious",
+		"eggs": struct {
+			source string
+			price  float64
+		}{"chicken", 1.75},
+		"steak": true,
+	}
+	fmt.Println("foods", foods)
+
+	// Ordering map keys
+	fmt.Println("Ordering map keys")
+
+	var dishes []string
+	for k := range foods {
+		dishes = append(dishes, k)
+	}
+	sort.Strings(dishes)
+
+	for _, d := range dishes {
+		fmt.Printf("%s, %v\n", d, foods[d])
+	}
+
+	// Ordering map values
+	fmt.Println("Ordering map values")
+
+	menu := map[string]int{
+		"bacon": 4,
+		"eggs":  4,
+		"steak": 9,
+	}
+
+	// var swap map[int]string // panic: assignment to entry in nil map
+	type kv struct {
+		Key   string
+		Value int
+	}
+
+	var ss []kv
+	for k, v := range menu {
+		ss = append(ss, kv{k, v})
+	}
+
+	sort.Slice(ss, func(i, j int) bool {
+		return ss[i].Value < ss[j].Value
+	})
+
+	for _, kv := range ss {
+		fmt.Printf("%s, %d\n", kv.Key, kv.Value)
+	}
+
+	// Clean map
+	fmt.Println("Clean map")
+	menu = map[string]int{}
+
+	fmt.Println(">map", menu)
 }
