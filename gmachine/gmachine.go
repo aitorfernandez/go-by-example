@@ -5,8 +5,12 @@ package gmachine
 // allocated to a new G-machine by default.
 const DefaultMemSize = 1024
 
-// HALT stop the machine.
-const HALT = iota
+const (
+	// HALT stop the machine.
+	HALT = iota
+	// NOOP short for NO OPeration.
+	NOOP
+)
 
 // Gmachine keeps information about our computer system model.
 type Gmachine struct {

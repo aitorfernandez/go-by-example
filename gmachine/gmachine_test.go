@@ -34,6 +34,16 @@ func TestHALT(t *testing.T) {
 
 	var wantP uint64 = 1
 	if wantP != g.P {
-		t.Errorf("want P == 1, got %d", g.P)
+		t.Errorf("want P == %d, got %d", wantP, g.P)
+	}
+}
+
+func TestNOOP(t *testing.T) {
+	g := gmachine.New()
+	g.Run()
+
+	var wantP uint64 = 2
+	if wantP != g.P {
+		t.Errorf("want P == %d, got %d", wantP, g.P)
 	}
 }
