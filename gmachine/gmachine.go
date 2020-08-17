@@ -10,12 +10,16 @@ const (
 	OpHALT = iota
 	// OpNOOP short for NO OPeration.
 	OpNOOP
+	// OpINCA increment.
+	OpINCA
+	// OpDECA decrement.
+	OpDECA
 )
 
 // Gmachine keeps information about our computer system model.
 type Gmachine struct {
-	// Program Counter.
-	P      uint64
+	P      uint64 // Program Counter.
+	A      uint64 // Accumulator register.
 	Memory []uint64
 }
 
@@ -24,6 +28,7 @@ func New() *Gmachine {
 	mem := make([]uint64, DefaultMemSize)
 	return &Gmachine{
 		P:      0,
+		A:      0,
 		Memory: mem,
 	}
 }
@@ -36,6 +41,10 @@ func (m *Gmachine) Run() {
 		switch op {
 		case OpHALT:
 			return
+		case OpINCA:
+			m.A++
+		case OpDECA:
+			m.A--
 		}
 	}
 }
