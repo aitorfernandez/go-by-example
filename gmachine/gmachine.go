@@ -14,6 +14,8 @@ const (
 	OpINCA
 	// OpDECA decrement.
 	OpDECA
+	// OpSETA set the A register to next value.
+	OpSETA
 )
 
 // Gmachine keeps information about our computer system model.
@@ -45,6 +47,15 @@ func (m *Gmachine) Run() {
 			m.A++
 		case OpDECA:
 			m.A--
+		case OpSETA:
+			m.A = m.Memory[m.P]
+			m.P++
 		}
 	}
+}
+
+// RunProgram stores a gmachine program into the memory and run it.
+func (m *Gmachine) RunProgram(program []uint64) {
+	m.Memory = append(program, m.Memory[len(program):]...)
+	m.Run()
 }
