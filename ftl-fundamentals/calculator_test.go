@@ -54,6 +54,14 @@ func TestAdd(t *testing.T) {
 			}
 		}
 	})
+
+	t.Run("Variadic", func(t *testing.T) {
+		var want float64 = 25
+		nums := []float64{4, 6, 7, 8}
+		if got := calc.Add(nums...); got != want {
+			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
+		}
+	})
 }
 
 func TestSubtract(t *testing.T) {
@@ -80,6 +88,14 @@ func TestSubtract(t *testing.T) {
 			t.Errorf("%s, got %f, want %f", k, got, v.output)
 		}
 	}
+
+	t.Run("Variadic", func(t *testing.T) {
+		var want float64 = -4
+		nums := []float64{12, 6, 5, 5}
+		if got := calc.Subtract(nums...); got != want {
+			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
+		}
+	})
 }
 
 func TestMultiply(t *testing.T) {
@@ -111,6 +127,14 @@ func TestMultiply(t *testing.T) {
 			t.Errorf("%s, got %f, want %f", k, got, v.output)
 		}
 	}
+
+	t.Run("Variadic with 10 inputs", func(t *testing.T) {
+		var want float64 = 11289600
+		nums := []float64{12, 6, 2, 4, 7, 8, 2, 5, 7, 5}
+		if got := calc.Multiply(nums...); got != want {
+			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
+		}
+	})
 }
 
 func TestDivide(t *testing.T) {
@@ -143,6 +167,14 @@ func TestDivide(t *testing.T) {
 			t.Errorf("%s, got %f, want %f", k, got, v.output)
 		}
 	}
+
+	t.Run("Variadic", func(t *testing.T) {
+		var want float64 = 1
+		nums := []float64{12, 6, 2}
+		if got, _ := calc.Divide(nums...); got != want {
+			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
+		}
+	})
 }
 
 func TestSqrt(t *testing.T) {
@@ -171,6 +203,26 @@ func TestSqrt(t *testing.T) {
 		}
 		if got != v.output {
 			t.Errorf("%s, got %f, want %f", k, got, v.output)
+		}
+	}
+}
+
+func TestStr(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		input  string
+		output float64
+	}{
+		{"2*2", 4},
+		{"1 + 1.5", 2.5},
+		{"18    /    6", 3},
+		{"100-0.1", 99.9},
+	}
+
+	for _, test := range tests {
+		if got := calc.Str(test.input); got != test.output {
+			t.Errorf("got %f, want %f", got, test.output)
 		}
 	}
 }
