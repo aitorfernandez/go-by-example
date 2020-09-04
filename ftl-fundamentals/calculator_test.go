@@ -62,6 +62,20 @@ func TestAdd(t *testing.T) {
 			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
 		}
 	})
+
+	t.Run("with no params", func(t *testing.T) {
+		var want float64 = 0
+		if got := calc.Add(); got != want {
+			t.Errorf("got %f, want %f for no params", got, want)
+		}
+	})
+
+	t.Run("with 1 param", func(t *testing.T) {
+		var want float64 = 2
+		if got := calc.Add(2); got != want {
+			t.Errorf("got %f, want %f for 1 param", got, want)
+		}
+	})
 }
 
 func TestSubtract(t *testing.T) {
@@ -94,6 +108,20 @@ func TestSubtract(t *testing.T) {
 		nums := []float64{12, 6, 5, 5}
 		if got := calc.Subtract(nums...); got != want {
 			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
+		}
+	})
+
+	t.Run("with no params", func(t *testing.T) {
+		var want float64 = 0
+		if got := calc.Subtract(); got != want {
+			t.Errorf("got %f, want %f for no params", got, want)
+		}
+	})
+
+	t.Run("with 1 param", func(t *testing.T) {
+		var want float64 = 2
+		if got := calc.Subtract(2); got != want {
+			t.Errorf("got %f, want %f for 1 param", got, want)
 		}
 	})
 }
@@ -135,6 +163,20 @@ func TestMultiply(t *testing.T) {
 			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
 		}
 	})
+
+	t.Run("with no params", func(t *testing.T) {
+		var want float64 = 0
+		if got := calc.Multiply(); got != want {
+			t.Errorf("got %f, want %f for no params", got, want)
+		}
+	})
+
+	t.Run("with 1 param", func(t *testing.T) {
+		var want float64 = 2
+		if got := calc.Multiply(2); got != want {
+			t.Errorf("got %f, want %f for 1 param", got, want)
+		}
+	})
 }
 
 func TestDivide(t *testing.T) {
@@ -173,6 +215,22 @@ func TestDivide(t *testing.T) {
 		nums := []float64{12, 6, 2}
 		if got, _ := calc.Divide(nums...); got != want {
 			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
+		}
+	})
+
+	t.Run("with no params", func(t *testing.T) {
+		var want float64 = 0
+		// Don't need catch the error with no params.
+		if got, _ := calc.Divide(); got != want {
+			t.Errorf("got %f, want %f for no params", got, want)
+		}
+	})
+
+	t.Run("with 1 param", func(t *testing.T) {
+		var want float64 = 2
+		// Don't need catch the error with 1 param.
+		if got, _ := calc.Divide(2); got != want {
+			t.Errorf("got %f, want %f for 1 param", got, want)
 		}
 	})
 }
