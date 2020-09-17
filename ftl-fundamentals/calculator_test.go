@@ -57,23 +57,8 @@ func TestAdd(t *testing.T) {
 
 	t.Run("Variadic", func(t *testing.T) {
 		var want float64 = 25
-		nums := []float64{4, 6, 7, 8}
-		if got := calc.Add(nums...); got != want {
-			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
-		}
-	})
-
-	t.Run("with no params", func(t *testing.T) {
-		var want float64 = 0
-		if got := calc.Add(); got != want {
-			t.Errorf("got %f, want %f for no params", got, want)
-		}
-	})
-
-	t.Run("with 1 param", func(t *testing.T) {
-		var want float64 = 2
-		if got := calc.Add(2); got != want {
-			t.Errorf("got %f, want %f for 1 param", got, want)
+		if got := calc.Add(4, 6, 7, 8); got != want {
+			t.Errorf("got %f, want %f for 4, 6, 7, 8", got, want)
 		}
 	})
 }
@@ -105,23 +90,8 @@ func TestSubtract(t *testing.T) {
 
 	t.Run("Variadic", func(t *testing.T) {
 		var want float64 = -4
-		nums := []float64{12, 6, 5, 5}
-		if got := calc.Subtract(nums...); got != want {
-			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
-		}
-	})
-
-	t.Run("with no params", func(t *testing.T) {
-		var want float64 = 0
-		if got := calc.Subtract(); got != want {
-			t.Errorf("got %f, want %f for no params", got, want)
-		}
-	})
-
-	t.Run("with 1 param", func(t *testing.T) {
-		var want float64 = 2
-		if got := calc.Subtract(2); got != want {
-			t.Errorf("got %f, want %f for 1 param", got, want)
+		if got := calc.Subtract(12, 6, 5, 5); got != want {
+			t.Errorf("got %f, want %f for 12, 6, 5, 5", got, want)
 		}
 	})
 }
@@ -158,23 +128,8 @@ func TestMultiply(t *testing.T) {
 
 	t.Run("Variadic with 10 inputs", func(t *testing.T) {
 		var want float64 = 11289600
-		nums := []float64{12, 6, 2, 4, 7, 8, 2, 5, 7, 5}
-		if got := calc.Multiply(nums...); got != want {
-			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
-		}
-	})
-
-	t.Run("with no params", func(t *testing.T) {
-		var want float64 = 0
-		if got := calc.Multiply(); got != want {
-			t.Errorf("got %f, want %f for no params", got, want)
-		}
-	})
-
-	t.Run("with 1 param", func(t *testing.T) {
-		var want float64 = 2
-		if got := calc.Multiply(2); got != want {
-			t.Errorf("got %f, want %f for 1 param", got, want)
+		if got := calc.Multiply(12, 6, 2, 4, 7, 8, 2, 5, 7, 5); got != want {
+			t.Errorf("got %f, want %f for 12, 6, 2, 4, 7, 8, 5, 7, 5", got, want)
 		}
 	})
 }
@@ -212,25 +167,8 @@ func TestDivide(t *testing.T) {
 
 	t.Run("Variadic", func(t *testing.T) {
 		var want float64 = 1
-		nums := []float64{12, 6, 2}
-		if got, _ := calc.Divide(nums...); got != want {
-			t.Errorf("got %f, want %f for trailing arguments %v", got, want, nums)
-		}
-	})
-
-	t.Run("with no params", func(t *testing.T) {
-		var want float64 = 0
-		// Don't need catch the error with no params.
-		if got, _ := calc.Divide(); got != want {
-			t.Errorf("got %f, want %f for no params", got, want)
-		}
-	})
-
-	t.Run("with 1 param", func(t *testing.T) {
-		var want float64 = 2
-		// Don't need catch the error with 1 param.
-		if got, _ := calc.Divide(2); got != want {
-			t.Errorf("got %f, want %f for 1 param", got, want)
+		if got, _ := calc.Divide(12, 6, 2); got != want {
+			t.Errorf("got %f, want %f for 12, 6, 2", got, want)
 		}
 	})
 }
@@ -276,6 +214,7 @@ func TestStr(t *testing.T) {
 		{"1 + 1.5", 2.5},
 		{"18    /    6", 3},
 		{"100-0.1", 99.9},
+		{"2+4+5", 11},
 	}
 
 	for _, test := range tests {

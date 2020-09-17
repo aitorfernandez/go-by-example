@@ -8,24 +8,9 @@ import (
 	"strings"
 )
 
-func hasEnoughNums(nums ...float64) (float64, bool) {
-	switch len(nums) {
-	case 0:
-		return 0, false
-	case 1:
-		return nums[0], false
-	default:
-		return 0, true
-	}
-}
-
 // Add returns the result of adding all numbers together.
-func Add(nums ...float64) float64 {
-	if val, ok := hasEnoughNums(nums...); !ok {
-		return val
-	}
-
-	var result float64
+func Add(a, b float64, nums ...float64) float64 {
+	result := a + b
 	for _, n := range nums {
 		result += n
 	}
@@ -34,28 +19,20 @@ func Add(nums ...float64) float64 {
 
 // Subtract takes `n` numbers and returns the result subtracting
 // the second and subsequent numbers from the first.
-func Subtract(nums ...float64) float64 {
-	if val, ok := hasEnoughNums(nums...); !ok {
-		return val
-	}
-
-	var result float64 = nums[0]
-	for i := 1; i < len(nums); i++ {
-		result -= nums[i]
+func Subtract(a, b float64, nums ...float64) float64 {
+	result := a - b
+	for _, n := range nums {
+		result -= n
 	}
 	return result
 }
 
 // Multiply takes `n` numbers and returns the result of the
 // multiplication them all together.
-func Multiply(nums ...float64) float64 {
-	if val, ok := hasEnoughNums(nums...); !ok {
-		return val
-	}
-
-	var result float64 = nums[0]
-	for i, l := 1, len(nums); i < l; i++ {
-		result *= nums[i]
+func Multiply(a, b float64, nums ...float64) float64 {
+	result := a * b
+	for _, n := range nums {
+		result *= n
 	}
 	return result
 }
@@ -63,18 +40,16 @@ func Multiply(nums ...float64) float64 {
 // Divide takes 'n' numbers and returns the result of dividing
 // the first by the second and subsequent numbers, or an error
 // if any of the divisors is zero.
-func Divide(nums ...float64) (float64, error) {
-	if val, ok := hasEnoughNums(nums...); !ok {
-		return val, nil
+func Divide(a, b float64, nums ...float64) (float64, error) {
+	if b == 0 {
+		return 0, fmt.Errorf("bad input: division by zero is undefined %f, %f", a, b)
 	}
-
-	var result float64 = nums[0]
-	for i := 1; i < len(nums); i++ {
-		if nums[i] == 0 {
-			return 0, fmt.Errorf("bad input: division by zero is undefined %v", nums)
+	result := a / b
+	for _, n := range nums {
+		if n == 0 {
+			return 0, fmt.Errorf("bad input: division by zero is undefined %f, %f", result, n)
 		}
-
-		result /= nums[i]
+		result /= n
 	}
 	return result, nil
 }
@@ -84,7 +59,6 @@ func Sqrt(a float64) (float64, error) {
 	if a < 0 {
 		return 0, fmt.Errorf("only nonnegative values are permited %f", a)
 	}
-
 	return math.Sqrt(a), nil
 }
 
@@ -92,27 +66,30 @@ func Sqrt(a float64) (float64, error) {
 func Str(str string) float64 {
 	str = strings.ReplaceAll(str, " ", "")
 	pos := strings.IndexAny(str, "*+/-")
+	values := strings.Split(str, string(str[pos]))
 
-	parse := func(s string) float64 {
-		i, _ := strconv.ParseFloat(s, 64)
-		return i
+	var nn []float64
+	for _, val := range values {
+		n, err := strconv.ParseFloat(val, 64)
+		if err != nil {
+			return 0
+		}
+		nn = append(nn, n)
 	}
-
-	nums := []float64{parse(str[:pos]), parse(str[pos+1:])}
 
 	switch str[pos] {
 	case '+':
-		return Add(nums...)
+		return Add(nn[0], nn[1], nn[2:]...)
 	case '-':
-		return Subtract(nums...)
+		return Subtract(nn[0], nn[1], nn[2:]...)
 	case '/':
-		res, err := Divide(nums...)
+		res, err := Divide(nn[0], nn[1], nn[2:]...)
 		if err != nil {
 			return 0
 		}
 		return res
 	case '*':
-		return Multiply(nums...)
+		return Multiply(nn[0], nn[1], nn[2:]...)
 	default:
 		return 0
 	}
