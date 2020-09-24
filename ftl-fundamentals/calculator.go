@@ -9,12 +9,15 @@ import (
 )
 
 // Add returns the result of adding all numbers together.
-func Add(a, b float64, nums ...float64) float64 {
+func Add(a, b float64, nums ...float64) (float64, error) {
 	result := a + b
+	if result > math.MaxFloat64 {
+		return 0, fmt.Errorf("sum is greater than %v", math.MaxFloat64)
+	}
 	for _, n := range nums {
 		result += n
 	}
-	return result
+	return result, nil
 }
 
 // Subtract takes `n` numbers and returns the result subtracting
@@ -62,17 +65,20 @@ func Sqrt(a float64) (float64, error) {
 	return math.Sqrt(a), nil
 }
 
-// Str accepts a string as an input calc operation and returns the result.
-func Str(str string) float64 {
+// Evaluate accepts a string expresion  as an input operation and returns the result.
+func Evaluate(str string) (float64, error) {
 	str = strings.ReplaceAll(str, " ", "")
 	pos := strings.IndexAny(str, "*+/-")
-	values := strings.Split(str, string(str[pos]))
+	if pos < 0 {
+		return 0, fmt.Errorf("operator invalid in %s", str)
+	}
 
+	values := strings.Split(str, string(str[pos]))
 	var nn []float64
 	for _, val := range values {
 		n, err := strconv.ParseFloat(val, 64)
 		if err != nil {
-			return 0
+			return 0, nil
 		}
 		nn = append(nn, n)
 	}
@@ -81,16 +87,12 @@ func Str(str string) float64 {
 	case '+':
 		return Add(nn[0], nn[1], nn[2:]...)
 	case '-':
-		return Subtract(nn[0], nn[1], nn[2:]...)
+		return Subtract(nn[0], nn[1], nn[2:]...), nil
 	case '/':
-		res, err := Divide(nn[0], nn[1], nn[2:]...)
-		if err != nil {
-			return 0
-		}
-		return res
+		return Divide(nn[0], nn[1], nn[2:]...)
 	case '*':
-		return Multiply(nn[0], nn[1], nn[2:]...)
+		return Multiply(nn[0], nn[1], nn[2:]...), nil
 	default:
-		return 0
+		return 0, fmt.Errorf("expresion is invalid %s", string(str[pos]))
 	}
 }

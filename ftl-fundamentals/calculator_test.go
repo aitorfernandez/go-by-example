@@ -1,6 +1,7 @@
 package calculator_test
 
 import (
+	"math"
 	"math/rand"
 	"testing"
 
@@ -27,38 +28,34 @@ func TestAdd(t *testing.T) {
 		}
 
 		for k, v := range tests {
-			got := calc.Add(v.a, v.b)
+			got, err := calc.Add(v.a, v.b)
+			if err != nil {
+				t.Fatalf("error status %w", err)
+			}
 			if got != v.output {
 				t.Errorf("%s, got %f, want %f", k, got, v.output)
 			}
 		}
 	})
 
-	t.Run("Addition Properties", func(t *testing.T) {
-		tests := map[string]struct {
-			a, b float64
-		}{
-			"Adition is commutative": {
-				a: calc.Add(3, 6),
-				b: calc.Add(6, 3),
-			},
-			"Associativity": {
-				a: calc.Add(2, 4) + 5,
-				b: 2 + calc.Add(4, 5),
-			},
+	t.Run("Variadic", func(t *testing.T) {
+		var want float64 = 25
+		got, err := calc.Add(4, 6, 7, 8)
+		if err != nil {
+			t.Fatalf("error status %w", err)
 		}
-
-		for k, v := range tests {
-			if v.a != v.b {
-				t.Errorf("%s, want same result %f, %f", k, v.a, v.b)
-			}
+		if got != want {
+			t.Errorf("got %f, want %f for 4, 6, 7, 8", got, want)
 		}
 	})
 
-	t.Run("Variadic", func(t *testing.T) {
-		var want float64 = 25
-		if got := calc.Add(4, 6, 7, 8); got != want {
-			t.Errorf("got %f, want %f for 4, 6, 7, 8", got, want)
+	t.Run("overflow", func(t *testing.T) {
+		got, err := calc.Add(math.MaxFloat64, math.MaxFloat64)
+		if err == nil {
+			t.Error("error is nil, want an error for overflow results")
+		}
+		if got != 0 {
+			t.Errorf("got %f, want 0 for overflow", got)
 		}
 	})
 }
@@ -138,36 +135,57 @@ func TestDivide(t *testing.T) {
 	t.Parallel()
 
 	tests := map[string]struct {
-		a, b, output float64
-		errExpected  bool
+		a, b, want  float64
+		errExpected bool
 	}{
 		"20 divided by 4 equals 5": {
 			a:           20,
 			b:           4,
-			output:      5,
+			want:        5,
 			errExpected: false,
 		},
 		"Division by zero": {
 			a:           6,
 			b:           0,
-			output:      0,
+			want:        0,
+			errExpected: true,
+		},
+		// "Expected error and don't expect one": {
+		// 	a:           2,
+		// 	b:           0,
+		// 	errExpected: false,
+		// },
+		"don't compare data value if error": {
+			a:           3,
+			b:           0,
+			want:        999,
 			errExpected: true,
 		},
 	}
 
 	for k, v := range tests {
 		got, err := calc.Divide(v.a, v.b)
-		if err != nil && !v.errExpected {
-			t.Fatalf("%s, error status %w, %v", k, err, v.errExpected)
+		// if err != nil {
+		// 	errReceived = err != nil
+		// }
+		errReceived := (err != nil)
+
+		// Ignore the data value if error.
+		if errReceived != v.errExpected {
+			t.Fatalf("%s, %f divide %f, unexpected error status %v", k, v.a, v.b, err)
 		}
-		if got != v.output {
-			t.Errorf("%s, got %f, want %f", k, got, v.output)
+		if !errReceived && got != v.want {
+			t.Errorf("%s, %f divide %f want %f, got %f", k, v.a, v.b, v.want, got)
 		}
 	}
 
 	t.Run("Variadic", func(t *testing.T) {
 		var want float64 = 1
-		if got, _ := calc.Divide(12, 6, 2); got != want {
+		got, err := calc.Divide(12, 6, 2)
+		if err != nil {
+			t.Fatalf("error status %w", err)
+		}
+		if got != want {
 			t.Errorf("got %f, want %f for 12, 6, 2", got, want)
 		}
 	})
@@ -180,7 +198,7 @@ func TestSqrt(t *testing.T) {
 		a, output   float64
 		errExpected bool
 	}{
-		"The square root": {
+		"Square root of 4 is 2": {
 			a:           4,
 			output:      2,
 			errExpected: false,
@@ -203,7 +221,7 @@ func TestSqrt(t *testing.T) {
 	}
 }
 
-func TestStr(t *testing.T) {
+func TestEvaluate(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -218,10 +236,24 @@ func TestStr(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if got := calc.Str(test.input); got != test.output {
+		got, err := calc.Evaluate(test.input)
+		if err != nil {
+			t.Fatalf("error status %w", err)
+		}
+		if got != test.output {
 			t.Errorf("got %f, want %f", got, test.output)
 		}
 	}
+
+	t.Run("Invalid expresion", func(t *testing.T) {
+		got, err := calc.Evaluate("2#2")
+		if err == nil {
+			t.Error("error is nil, want an error for invalid expresions")
+		}
+		if got != 0 {
+			t.Errorf("got %v, want 0 for invalid expresions", got)
+		}
+	})
 }
 
 func BenchmarkAddRandom(b *testing.B) {
@@ -230,7 +262,11 @@ func BenchmarkAddRandom(b *testing.B) {
 		y := rand.Float64()
 
 		result := x + y
-		if calc.Add(x, y) != result {
+		got, err := calc.Add(x, y)
+		if err != nil {
+			b.Fatalf("error status %w", err)
+		}
+		if got != result {
 			b.Errorf("unexpected result %f, %f, %f", x, y, result)
 		}
 	}
